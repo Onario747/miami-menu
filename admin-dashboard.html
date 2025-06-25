@@ -623,9 +623,6 @@
       </div>
     </div>
 
-    <!-- Configuration -->
-    <script src="config.js"></script>
-
     <!-- Firebase SDKs -->
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -645,9 +642,18 @@
         orderBy,
       } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-      // Use Firebase Configuration from config.js
-      const firebaseConfig = CONFIG.firebase;
-      const imgbbApiKey = CONFIG.imgbb.apiKey;
+      // Configuration for production deployment
+      const firebaseConfig = {
+        apiKey: "AIzaSyDwbtUp6ROeAlNPphEq9AMMShUq6Px6xZU",
+        authDomain: "miami-menu.firebaseapp.com",
+        projectId: "miami-menu",
+        storageBucket: "miami-menu.firebasestorage.app",
+        messagingSenderId: "917393218492",
+        appId: "1:917393218492:web:23a3fd511f12837d8269b9",
+      };
+
+      // ⚠️ IMPORTANT: Your ImgBB API key for deployment
+      const imgbbApiKey = "033ae924c245c47a196d5b97d7fa338d";
 
       // Initialize Firebase
       const app = initializeApp(firebaseConfig);

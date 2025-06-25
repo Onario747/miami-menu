@@ -123,9 +123,6 @@
       </form>
     </div>
 
-    <!-- Configuration -->
-    <script src="config.js"></script>
-
     <!-- Firebase SDKs -->
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -135,8 +132,15 @@
         onAuthStateChanged,
       } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-      // Use Firebase Configuration from config.js
-      const firebaseConfig = CONFIG.firebase;
+      // Firebase Configuration for production
+      const firebaseConfig = {
+        apiKey: "AIzaSyDwbtUp6ROeAlNPphEq9AMMShUq6Px6xZU",
+        authDomain: "miami-menu.firebaseapp.com",
+        projectId: "miami-menu",
+        storageBucket: "miami-menu.firebasestorage.app",
+        messagingSenderId: "917393218492",
+        appId: "1:917393218492:web:23a3fd511f12837d8269b9",
+      };
 
       // Initialize Firebase
       const app = initializeApp(firebaseConfig);
