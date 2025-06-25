@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Miami Menu</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="menu" id="menu">
+        <div class="loading">Loading menu items...</div>
+      </div>
+    </div>
+
+    <script>
+      // Load menu items from localStorage (ImgBB URLs)
+      function loadMenuItems() {
+        const menuContainer = document.getElementById("menu");
+
+        try {
+          const stored = localStorage.getItem("menuImages");
+          const images = stored ? JSON.parse(stored) : [];
+
+          if (images.length === 0) {
+            menuContainer.innerHTML = `
+              <div style="text-align: center; color: #666; padding: 3rem;">
+                <h2>Welcome to Miami Menu</h2>
+                <p>No menu items available yet.</p>
+                <p>Menu items will appear here once uploaded via the admin dashboard.</p>
+              </div>
+            `;
+            return;
+          }
+
+          let menuHTML = "";
+          images.forEach((image) => {
+            menuHTML += `
+              <div class="menu-item">
+                <img src="${image.url}" alt="${image.name}" loading="lazy" />
+              </div>
+            `;
+          });
+
+          menuContainer.innerHTML = menuHTML;
+        } catch (error) {
+          console.error("Error loading menu items:", error);
+          menuContainer.innerHTML = `
+            <div style="text-align: center; color: #666; padding: 2rem;">
+              <p>Error loading menu items.</p>
+              <p>Please refresh the page or contact support.</p>
+            </div>
+          `;
+        }
+      }
+
+      // Load menu items when page loads
+      loadMenuItems();
+
+      // Auto-refresh every 30 seconds to show new items added via admin
+      setInterval(loadMenuItems, 30000);
+
+      // Listen for storage changes from admin dashboard
+      window.addEventListener("storage", function (e) {
+        if (e.key === "menuImages") {
+          loadMenuItems();
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Miami Menu</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="menu" id="menu">
+        <div class="loading">Loading menu items...</div>
+      </div>
+    </div>
+
+    <script>
+      // Load menu items from localStorage (free version)
+      function loadMenuItems() {
+        const menuContainer = document.getElementById("menu");
+
+        try {
+          const stored = localStorage.getItem("menuImages");
+          const images = stored ? JSON.parse(stored) : [];
+
+          if (images.length === 0) {
+            menuContainer.innerHTML =
+              '<p style="text-align: center; color: #666; padding: 2rem;">No menu items available yet.<br>Use the admin dashboard to add items.</p>';
+            return;
+          }
+
+          let menuHTML = "";
+          images.forEach((image) => {
+            menuHTML += `
+              <div class="menu-item">
+                <img src="${image.url}" alt="${image.name}" />
+              </div>
+            `;
+          });
+
+          menuContainer.innerHTML = menuHTML;
+        } catch (error) {
+          console.error("Error loading menu items:", error);
+          menuContainer.innerHTML =
+            '<p style="text-align: center; color: #666; padding: 2rem;">Error loading menu items.</p>';
+        }
+      }
+
+      // Load menu items when page loads
+      loadMenuItems();
+
+      // Optional: Refresh every 30 seconds to show new items added via admin
+      setInterval(loadMenuItems, 30000);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard - Miami Menu</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+        line-height: 1.6;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1.5rem 2rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .header-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .header h1 {
+        font-size: 1.8rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .header h1::before {
+        content: "🍽️";
+        font-size: 1.5rem;
+      }
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .admin-badge {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+      }
+
+      .logout-btn {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        padding: 0.6rem 1.2rem;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+      }
+
+      .logout-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateY(-1px);
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      .dashboard-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .stat-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        text-align: center;
+        transition: transform 0.3s ease;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .stat-number {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #667eea;
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-label {
+        color: #666;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .upload-section {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .upload-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+      }
+
+      .upload-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .upload-header h2 {
+        color: #333;
+        font-size: 1.5rem;
+        font-weight: 600;
+      }
+
+      .upload-header::before {
+        content: "📁";
+        font-size: 1.5rem;
+      }
+
+      .upload-container {
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: 2rem;
+        align-items: start;
+      }
+
+      .upload-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .form-row {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .form-group {
+        flex: 1;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #333;
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      input[type="file"] {
+        width: 100%;
+        padding: 1rem;
+        border: 3px dashed #ddd;
+        border-radius: 10px;
+        background: #f8f9fa;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+      }
+
+      input[type="file"]:hover {
+        border-color: #667eea;
+        background: #f0f4ff;
+      }
+
+      input[type="file"]:focus {
+        outline: none;
+        border-color: #667eea;
+        background: #f0f4ff;
+      }
+
+      input[type="text"] {
+        width: 100%;
+        padding: 1rem;
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: white;
+      }
+
+      input[type="text"]:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      .upload-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+      }
+
+      .upload-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+      }
+
+      .upload-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      .preview-container {
+        background: #f8f9fa;
+        border: 2px dashed #dee2e6;
+        border-radius: 15px;
+        padding: 1rem;
+        text-align: center;
+        min-height: 200px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+      }
+
+      .preview-container.has-image {
+        border-color: #667eea;
+        background: white;
+      }
+
+      .preview-image {
+        max-width: 100%;
+        max-height: 200px;
+        border-radius: 10px;
+        object-fit: cover;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .preview-placeholder {
+        color: #6c757d;
+        font-size: 0.9rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .preview-placeholder::before {
+        content: "🖼️";
+        font-size: 2rem;
+        opacity: 0.5;
+      }
+
+      .images-section {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .images-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #764ba2, #667eea);
+      }
+
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+      }
+
+      .section-header h2 {
+        color: #333;
+        font-size: 1.5rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .section-header h2::before {
+        content: "🍽️";
+        font-size: 1.2rem;
+      }
+
+      .view-toggle {
+        display: flex;
+        background: #f1f3f4;
+        border-radius: 25px;
+        padding: 0.2rem;
+      }
+
+      .view-btn {
+        padding: 0.5rem 1rem;
+        border: none;
+        background: transparent;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        color: #666;
+      }
+
+      .view-btn.active {
+        background: white;
+        color: #667eea;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .images-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 2rem;
+      }
+
+      .image-card {
+        border: 1px solid #e9ecef;
+        border-radius: 15px;
+        overflow: hidden;
+        background: white;
+        transition: all 0.3s ease;
+        position: relative;
+        group: hover;
+      }
+
+      .image-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        border-color: #667eea;
+      }
+
+      .image-card img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+      }
+
+      .image-card:hover img {
+        transform: scale(1.05);
+      }
+
+      .image-overlay {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .image-card:hover .image-overlay {
+        opacity: 1;
+      }
+
+      .image-info {
+        padding: 1.5rem;
+      }
+
+      .image-name {
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #333;
+        font-size: 1.1rem;
+      }
+
+      .image-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        font-size: 0.85rem;
+        color: #666;
+      }
+
+      .image-actions {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .delete-btn {
+        background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+        color: white;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        flex: 1;
+      }
+
+      .delete-btn:hover {
+        background: linear-gradient(135deg, #ff5252, #d32f2f);
+        transform: translateY(-1px);
+        box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+      }
+
+      .loading {
+        text-align: center;
+        padding: 3rem;
+        color: #666;
+        font-size: 1.1rem;
+      }
+
+      .loading::before {
+        content: "⏳";
+        font-size: 2rem;
+        display: block;
+        margin-bottom: 1rem;
+      }
+
+      .message {
+        padding: 1rem 1.5rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+        display: none;
+        font-weight: 500;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .message.success {
+        background: linear-gradient(135deg, #d4edda, #c3e6cb);
+        color: #155724;
+        border-left: 4px solid #28a745;
+      }
+
+      .message.error {
+        background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+        color: #721c24;
+        border-left: 4px solid #dc3545;
+      }
+
+      .api-warning {
+        background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+        border: 1px solid #f0ad4e;
+        padding: 1.5rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+        color: #856404;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: #666;
+      }
+
+      .empty-state::before {
+        content: "📷";
+        font-size: 4rem;
+        display: block;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+      }
+
+      @media (max-width: 768px) {
+        .upload-container {
+          grid-template-columns: 1fr;
+        }
+
+        .form-row {
+          flex-direction: column;
+        }
+
+        .images-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .header-content {
+          flex-direction: column;
+          gap: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="header-content">
+        <h1>Miami Menu Dashboard</h1>
+        <div class="user-info">
+          <span class="admin-badge">Admin</span>
+          <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="dashboard-stats">
+        <div class="stat-card">
+          <div class="stat-number" id="totalImages">0</div>
+          <div class="stat-label">Total Items</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="todayUploads">0</div>
+          <div class="stat-label">Today's Uploads</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">Active</div>
+          <div class="stat-label">System Status</div>
+        </div>
+      </div>
+
+      <div class="api-warning" id="apiWarning" style="display: none">
+        <strong>⚠️ ImgBB API Key Missing!</strong><br />
+        Please add your ImgBB API key to <code>config.js</code> file to enable
+        image uploads.
+      </div>
+
+      <div class="message" id="message"></div>
+
+      <div class="upload-section">
+        <div class="upload-header">
+          <h2>Upload New Menu Item</h2>
+        </div>
+
+        <div class="upload-container">
+          <div class="upload-form">
+            <div class="form-group">
+              <label for="imageFile">Select Image</label>
+              <input
+                type="file"
+                id="imageFile"
+                accept="image/*"
+                required
+                onchange="previewImage()"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="imageName">Menu Item Name</label>
+              <input
+                type="text"
+                id="imageName"
+                placeholder="e.g., Cuban Sandwich Special"
+                required
+              />
+            </div>
+
+            <button class="upload-btn" onclick="uploadImage()" id="uploadBtn">
+              Upload to Menu
+            </button>
+          </div>
+
+          <div class="preview-container" id="previewContainer">
+            <div class="preview-placeholder">
+              Image Preview
+              <span>Select an image to see preview</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="images-section">
+        <div class="section-header">
+          <h2>Menu Items Gallery</h2>
+          <div class="view-toggle">
+            <button class="view-btn active">Grid</button>
+            <button class="view-btn">List</button>
+          </div>
+        </div>
+        <div class="images-grid" id="imagesGrid">
+          <div class="loading">Loading your delicious menu items...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Configuration -->
+    <script src="config.js"></script>
+
+    <!-- Firebase SDKs -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+      import {
+        getAuth,
+        onAuthStateChanged,
+        signOut,
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+      import {
+        getFirestore,
+        collection,
+        addDoc,
+        getDocs,
+        deleteDoc,
+        doc,
+        query,
+        orderBy,
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+      // Use Firebase Configuration from config.js
+      const firebaseConfig = CONFIG.firebase;
+      const imgbbApiKey = CONFIG.imgbb.apiKey;
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      // Global variables
+      let menuItems = [];
+
+      // Check authentication
+      onAuthStateChanged(auth, (user) => {
+        if (!user) {
+          window.location.href = "admin-login.html";
+        } else {
+          loadImages();
+          checkApiKey();
+        }
+      });
+
+      // Check if ImgBB API key is configured
+      function checkApiKey() {
+        if (!imgbbApiKey || imgbbApiKey === "YOUR_IMGBB_API_KEY_HERE") {
+          document.getElementById("apiWarning").style.display = "block";
+          document.getElementById("uploadBtn").disabled = true;
+        }
+      }
+
+      // Image preview functionality
+      window.previewImage = function () {
+        const fileInput = document.getElementById("imageFile");
+        const previewContainer = document.getElementById("previewContainer");
+
+        if (fileInput.files && fileInput.files[0]) {
+          const file = fileInput.files[0];
+          const reader = new FileReader();
+
+          reader.onload = function (e) {
+            previewContainer.innerHTML = `
+              <img src="${e.target.result}" alt="Preview" class="preview-image">
+            `;
+            previewContainer.classList.add("has-image");
+          };
+
+          reader.readAsDataURL(file);
+        } else {
+          previewContainer.innerHTML = `
+            <div class="preview-placeholder">
+              Image Preview
+              <span>Select an image to see preview</span>
+            </div>
+          `;
+          previewContainer.classList.remove("has-image");
+        }
+      };
+
+      // Update stats
+      function updateStats() {
+        const totalImages = menuItems.length;
+        const today = new Date().toDateString();
+        const todayUploads = menuItems.filter((item) => {
+          const itemDate =
+            item.createdAt?.toDate?.()?.toDateString() ||
+            new Date(item.createdAt).toDateString();
+          return itemDate === today;
+        }).length;
+
+        document.getElementById("totalImages").textContent = totalImages;
+        document.getElementById("todayUploads").textContent = todayUploads;
+      }
+
+      // Global functions
+      window.logout = async function () {
+        try {
+          await signOut(auth);
+          window.location.href = "admin-login.html";
+        } catch (error) {
+          console.error("Error signing out:", error);
+        }
+      };
+
+      window.uploadImage = async function () {
+        if (!imgbbApiKey || imgbbApiKey === "YOUR_IMGBB_API_KEY_HERE") {
+          showMessage(
+            "Please configure your ImgBB API key in config.js",
+            "error"
+          );
+          return;
+        }
+
+        const fileInput = document.getElementById("imageFile");
+        const nameInput = document.getElementById("imageName");
+        const uploadBtn = document.getElementById("uploadBtn");
+
+        if (!fileInput.files[0] || !nameInput.value) {
+          showMessage("Please select an image and enter a name", "error");
+          return;
+        }
+
+        const file = fileInput.files[0];
+        const imageName = nameInput.value.trim();
+
+        uploadBtn.disabled = true;
+        uploadBtn.innerHTML = "⏳ Uploading...";
+
+        try {
+          // Step 1: Upload image to ImgBB
+          const formData = new FormData();
+          formData.append("image", file);
+          formData.append("name", imageName);
+
+          const imgbbResponse = await fetch(
+            `https://api.imgbb.com/1/upload?key=${imgbbApiKey}`,
+            {
+              method: "POST",
+              body: formData,
+            }
+          );
+
+          const imgbbResult = await imgbbResponse.json();
+
+          if (!imgbbResult.success) {
+            throw new Error(
+              imgbbResult.error?.message || "ImgBB upload failed"
+            );
+          }
+
+          // Step 2: Save image data to Firebase Firestore
+          const imageData = {
+            name: imageName,
+            imageUrl: imgbbResult.data.url,
+            thumbnailUrl: imgbbResult.data.thumb?.url || imgbbResult.data.url,
+            deleteHash: imgbbResult.data.delete_url,
+            createdAt: new Date(),
+            imgbbId: imgbbResult.data.id,
+          };
+
+          await addDoc(collection(db, "menuItems"), imageData);
+
+          showMessage("🎉 Image uploaded successfully!", "success");
+          fileInput.value = "";
+          nameInput.value = "";
+
+          // Reset preview
+          const previewContainer = document.getElementById("previewContainer");
+          previewContainer.innerHTML = `
+            <div class="preview-placeholder">
+              Image Preview
+              <span>Select an image to see preview</span>
+            </div>
+          `;
+          previewContainer.classList.remove("has-image");
+
+          loadImages();
+        } catch (error) {
+          console.error("Error uploading image:", error);
+          showMessage("❌ Error uploading image: " + error.message, "error");
+        } finally {
+          uploadBtn.disabled = false;
+          uploadBtn.innerHTML = "Upload to Menu";
+        }
+      };
+
+      window.deleteImage = async function (docId, deleteHash, imageName) {
+        if (!confirm(`Are you sure you want to delete "${imageName}"?`)) {
+          return;
+        }
+
+        try {
+          // Delete from Firebase Firestore
+          await deleteDoc(doc(db, "menuItems", docId));
+
+          showMessage("🗑️ Image deleted successfully!", "success");
+          loadImages();
+        } catch (error) {
+          console.error("Error deleting image:", error);
+          showMessage("❌ Error deleting image: " + error.message, "error");
+        }
+      };
+
+      async function loadImages() {
+        const imagesGrid = document.getElementById("imagesGrid");
+        imagesGrid.innerHTML =
+          '<div class="loading">Loading your delicious menu items...</div>';
+
+        try {
+          const q = query(
+            collection(db, "menuItems"),
+            orderBy("createdAt", "desc")
+          );
+          const querySnapshot = await getDocs(q);
+
+          menuItems = [];
+          querySnapshot.forEach((doc) => {
+            menuItems.push({ id: doc.id, ...doc.data() });
+          });
+
+          updateStats();
+
+          if (menuItems.length === 0) {
+            imagesGrid.innerHTML = `
+              <div class="empty-state">
+                <h3>No menu items yet</h3>
+                <p>Upload your first delicious menu item above!</p>
+              </div>
+            `;
+            return;
+          }
+
+          let imagesHTML = "";
+          menuItems.forEach((item) => {
+            const uploadDate =
+              item.createdAt?.toDate?.() || new Date(item.createdAt);
+            imagesHTML += `
+              <div class="image-card">
+                <div class="image-overlay">
+                  ${item.imgbbId}
+                </div>
+                <img src="${item.thumbnailUrl || item.imageUrl}" alt="${
+              item.name
+            }" />
+                <div class="image-info">
+                  <div class="image-name">${item.name}</div>
+                  <div class="image-meta">
+                    <span>📅 ${uploadDate.toLocaleDateString()}</span>
+                    <span>🔗 ImgBB</span>
+                  </div>
+                  <div class="image-actions">
+                    <button class="delete-btn" onclick="deleteImage('${
+                      item.id
+                    }', '${item.deleteHash}', '${item.name}')">
+                      🗑️ Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            `;
+          });
+
+          imagesGrid.innerHTML = imagesHTML;
+        } catch (error) {
+          console.error("Error loading images:", error);
+          imagesGrid.innerHTML =
+            '<div class="empty-state"><h3>Error loading images</h3><p>Please refresh the page</p></div>';
+        }
+      }
+
+      function showMessage(text, type) {
+        const messageDiv = document.getElementById("message");
+        messageDiv.textContent = text;
+        messageDiv.className = `message ${type}`;
+        messageDiv.style.display = "block";
+
+        setTimeout(() => {
+          messageDiv.style.display = "none";
+        }, 5000);
+      }
+    </script>
+  </body>
+</html>
